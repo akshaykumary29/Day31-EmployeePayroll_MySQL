@@ -1,0 +1,277 @@
+			Welcome to Employee_Payroll_Service
+
+-------------------------------------------------------------------------------------------------------
+
+// UC1:
+   Creating payRoll Service
+______________________________
+
+mysql> create database payroll_service;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| demo               |
+| information_schema |
+| mysql              |
+| payroll_service    |
+| performance_schema |             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.00 sec)
+-------------------------------------------------------------------------------------------------------
+
+// UC2:
+   Creating table in DataBase:
+________________________________
+
+mysql> use payroll_service;
+Database changed
+mysql> create table payroll_service
+    -> (
+    -> id       int NOT NULL auto_increment,
+    -> name     varchar(50) NOT NULL,
+    -> salary   double NOT NULL,
+    -> start    date NOT NULL,
+    -> PRIMARY KEY      (id)
+    -> );
+Query OK, 0 rows affected (2.25 sec)
+
+mysql>
+
+desc employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(100) | NO   |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+// UC3: 
+  Inserting Data Into Table
+___________________________________________
+
+mysql> insert into employee_payroll(name,salary,start) values
+    -> ("Akshay",200000.0,"2020-12-01"),
+    -> ("Suraj",250000.0,"2021-02-01"),
+    -> ("Ganesh",350000.0,"2020-02-01");
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+// UC4:
+  Retreiving  Data from Table
+____________________________________________
+
+mysql> select* from employee_payroll;
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Akshay | 200000 | 2020-12-01 |
+|  2 | Suraj  | 250000 | 2021-02-01 |
+|  3 | Ganesh | 350000 | 2020-02-01 |
++----+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee_payroll(name,salary,start) values ('Bill',420000.0,'2021-06-04');
+Query OK, 1 row affected (0.00 sec)
+
+
+mysql> select* from employee_payroll;
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Akshay | 200000 | 2020-12-01 |
+|  2 | Suraj  | 250000 | 2021-02-01 |
+|  3 | Ganesh | 350000 | 2020-02-01 |
+|  4 | Bill   | 420000 | 2021-06-04 |
++----+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+// UC5:
+ Retreiving Salary Data from a Table By person name
+___________________________________________________________
+
+mysql> select salary from employee_payroll where name ='Bill';
++--------+
+| salary |
++--------+
+| 420000 |
++--------+
+1 row in set (0.00 sec)
+
+mysql> select salary from employee_payroll cast('2020-01-01' as date) and date(now());
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cast('2018-01-01' as date) and date(now())' at line 1
+mysql> select salary from employee_payroll where start between cast('2020-01-01' as date) and date(now());
++--------+
+| salary |
++--------+
+| 200000 |
+| 250000 |
+| 350000 |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> select* from employee_payroll where start between cast('2020-01-01' as date) and date(now());
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  1 | Akshay | 200000 | 2020-12-01 |
+|  2 | Suraj  | 250000 | 2021-02-01 |
+|  3 | Ganesh | 350000 | 2020-02-01 |
++----+--------+--------+------------+
+3 rows in set (0.00 sec)
+
+mysql> select* from employee_payroll where start between cast('2020-01-01' as date) and date(now());
++----+--------+--------+------------+
+| id | name   | salary | start      |
++----+--------+--------+------------+
+|  3 | Ganesh | 350000 | 2020-02-01 |
++----+--------+--------+------------+
+1 row in set (0.00 sec)
+
+
+// UC6:
+  Adding Gender to the Table
+________________________________________________
+
+mysql> alter table employee_payroll add gender char(1) after name;
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc employee_payroll;
++--------+--------------+------+-----+---------+----------------+
+| Field  | Type         | Null | Key | Default | Extra          |
++--------+--------------+------+-----+---------+----------------+
+| id     | int          | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(100) | NO   |     | NULL    |                |
+| gender | char(1)      | YES  |     | NULL    |                |
+| salary | double       | NO   |     | NULL    |                |
+| start  | date         | NO   |     | NULL    |                |
++--------+--------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+
+mysql> update employee_payroll set gender='M' where name = 'Akshay';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select* from employee_payroll;
++----+--------+--------+--------+------------+
+| id | name   | gender | salary | start      |
++----+--------+--------+--------+------------+
+|  1 | Akshay | M      | 200000 | 2020-12-01 |
+|  2 | Suraj  | NULL   | 250000 | 2021-02-01 |
+|  3 | Ganesh | NULL   | 350000 | 2020-02-01 |
+|  4 | Bill   | NULL   | 420000 | 2021-06-04 |
++----+--------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill or name ='Ganesh';
+    '>
+    '> ^C
+mysql> update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill or name ='Ganesh';
+    '> update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Ganesh';
+update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill' at line 1
+mysql> update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill;
+    '> update employee_payroll set gender='M' where name = 'Suraj' or name ='Bill;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'M' where name = 'Suraj' or name ='Bill' at line 2
+mysql> ^C
+mysql> update employee_payroll set gender = 'M' where name='Ganesh' or name ='Bill';
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+
+| id | name   | gender | salary | start      |
++----+--------+--------+--------+------------+
+|  1 | Akshay | M      | 200000 | 2020-12-01 |
+|  2 | Suraj  | NULL   | 250000 | 2021-02-01 |
+|  3 | Ganesh | M      | 350000 | 2020-02-01 |
+|  4 | Bill   | M      | 420000 | 2021-06-04 |
++----+--------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+
+| id | name   | gender | salary | start      |
++----+--------+--------+--------+------------+
+|  1 | Akshay | M      | 200000 | 2020-12-01 |
+|  2 | Suraj  | NULL   | 250000 | 2021-02-01 |
+|  3 | Ganesh | M      | 350000 | 2020-02-01 |
+|  4 | Bill   | M      | 420000 | 2021-06-04 |
++----+--------+--------+--------+------------+
+4 rows in set (0.00 sec)
+
+mysql> update employee_payroll set gender = 'M' where name='Suraj';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from employee_payroll;
++----+--------+--------+--------+------------+
+| id | name   | gender | salary | start      |
++----+--------+--------+--------+------------+
+|  1 | Akshay | M      | 200000 | 2020-12-01 |
+|  2 | Suraj  | M      | 250000 | 2021-02-01 |
+|  3 | Ganesh | M      | 350000 | 2020-02-01 |
+|  4 | Bill   | M      | 420000 | 2021-06-04 |
++----+--------+--------+--------+------------+
+4 rows in set (0.00 sec)
+//UC7:
+Find sum,avg of salary and count from table
+_______________________________________________
+
+mysql> select sum(salary) from employee_payroll where gender ="M" group by gender;
++-------------+
+| sum(salary) |
++-------------+
+|     1220000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select avg(salary) from employee_payroll where gender ="M" group by gender;
++-------------+
+| avg(salary) |
++-------------+
+|      305000 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select gender,count(salary) from employee_payroll group by gender;
++--------+---------------+
+| gender | count(salary) |
++--------+---------------+
+| M      |             4 |
++--------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select gender,min(salary) from employee_payroll group by gender;
++--------+-------------+
+| gender | min(salary) |
++--------+-------------+
+| M      |      200000 |
++--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select name, gender,min(salary) from employee_payroll group by gender;
++--------+--------+-------------+
+| name   | gender | min(salary) |
++--------+--------+-------------+
+| Akshay | M      |      200000 |
++--------+--------+-------------+
+1 row in set (0.00 sec)
+
+mysql> select name, gender,max(salary) from employee_payroll group by gender;
++--------+--------+-------------+
+| name   | gender | max(salary) |
++--------+--------+-------------+
+| Akshay | M      |      420000 |
++--------+--------+-------------+
+1 row in set (0.00 sec)
+
+-----------------------------------------------------------------------------------------------------
